@@ -1,0 +1,32 @@
+name: tdd_example
+description: A new Flutter project.
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: '>=2.16.1 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  font_awesome_flutter: ^10.1.0
+  flutter_riverpod: ^1.0.3
+  json_serializable: ^6.1.5
+  equatable: ^2.0.3
+  get_it: ^7.2.0
+  dartz: ^0.10.1
+  connectivity_plus: ^2.3.0
+  shared_preferences: ^2.0.13
+  dio: ^4.0.6
+  cached_network_image: ^3.2.0
+  local_auth: ^2.0.0
+  dart_web3: ^0.0.3
+  wallet_connect: ^1.0.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+  build_runner: ^2.1.8
+  mockito: ^5.1.0
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/images
