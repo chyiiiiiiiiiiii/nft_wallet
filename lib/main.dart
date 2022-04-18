@@ -1,17 +1,19 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'pages/begin/begin_page.dart';
+import 'core/initialization.dart';
+import 'pages/yii/yii_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  init();
-  runApp(const MyApp());
-}
 
-void init() {
-  // equatable model class will auto set stringify 'true', and have toString() to show content
-  EquatableConfig.stringify = true;
+  await init();
+
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,7 +26,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green.shade800,
       ),
-      home: const BeginPage(),
+      home: const YiiPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
