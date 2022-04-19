@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "tdd_example",
+            "name": "nft_wallet",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "tdd_example (profile mode)",
+            "name": "nft_wallet (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "tdd_example (release mode)",
+            "name": "nft_wallet (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

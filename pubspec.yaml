@@ -1,4 +1,4 @@
-name: tdd_example
+name: nft_wallet
 description: A new Flutter project.
 publish_to: none
 version: 1.0.0+1
@@ -24,12 +24,18 @@ dependencies:
   pretty_dio_logger: ^1.1.1
   cached_network_image: ^3.2.0
   local_auth: ^2.0.0
-  dart_web3: ^0.0.3
-  wallet_connect: ^1.0.2
+  web3dart: ^2.3.5
+  walletconnect_dart: ^0.0.3
+  url_launcher: ^6.0.20
   logger: ^1.1.0
   fluttertoast: ^8.0.9
-  path_provider: ^2.0.
+  path_provider: ^2.0.9
   auto_route: ^3.2.4
+  collection: ^1.15.0
+  flutter_swiper_null_safety: ^1.0.2
+  matrix4_transform: ^2.0.1
+  simple_animations: ^4.0.1
+  supercharged: ^2.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,3 +46,5 @@ dev_dependencies:
   mockito: ^5.1.0
 flutter:
   uses-material-design: true
+  assets:
+    - assets/images/

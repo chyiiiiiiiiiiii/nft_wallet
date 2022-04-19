@@ -1,7 +1,7 @@
-import '../../../pages/yii/data/datasources/begin_local_data_source.dart';
-import '../../../pages/yii/data/datasources/begin_remote_data_source.dart';
-import '../../../pages/yii/data/repositories/begin_repository_impl.dart';
-import '../../../pages/yii/domain/repositories/begin_repository.dart';
+import '../../../pages/begin/data/datasources/begin_local_data_source.dart';
+import '../../../pages/begin/data/datasources/begin_remote_data_source.dart';
+import '../../../pages/begin/data/repositories/begin_repository_impl.dart';
+import '../../../pages/begin/domain/repositories/begin_repository.dart';
 import '../../api_service/request_api.dart';
 import '../injection_container.dart';
 

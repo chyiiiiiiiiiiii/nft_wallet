@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../../pages/yii/data/models/user.dart';
+import '../../pages/begin/data/models/user.dart';
 import '../error/exceptions.dart';
 import 'api_service.dart';
 

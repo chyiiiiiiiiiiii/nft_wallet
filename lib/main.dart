@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/initialization.dart';
-import 'pages/yii/yii_page.dart';
+import 'pages/begin/presentation/pages/begin_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.green.shade800,
       ),
-      home: const YiiPage(),
+      home: const BeginPage(),
       debugShowCheckedModeBanner: false,
     );
   }
