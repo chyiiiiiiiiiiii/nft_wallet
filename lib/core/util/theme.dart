@@ -8,6 +8,12 @@ class CustomTheme {
   static const Color bgSecondColor = Color(0xFF2F2F47);
   static const Color gray = Color.fromARGB(255, 149, 149, 149);
 
+  static const List<Color> nftBgColors = [
+    CustomTheme.primaryColor,
+    CustomTheme.secondColor,
+    Colors.deepPurpleAccent,
+  ];
+
   static const TextStyle textSmallPrimary = TextStyle(color: primaryColor, fontSize: 12, fontWeight: FontWeight.w600);
   static const TextStyle textPrimary = TextStyle(color: primaryColor, fontSize: 16, fontWeight: FontWeight.w600);
   static const TextStyle textSmallWhite = TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600);

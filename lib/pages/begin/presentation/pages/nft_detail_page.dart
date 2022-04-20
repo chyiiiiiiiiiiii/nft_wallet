@@ -111,7 +111,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
                                   _metaDataBox(),
                                 ],
                               ),
-                              SizedBox(height: 25),
+                              const SizedBox(height: 25),
                               Wrap(
                                 spacing: 5,
                                 runSpacing: 5,
@@ -145,12 +145,12 @@ class _NftDetailPageState extends State<NftDetailPage> {
                               CommonButton(
                                 onPress: () {},
                                 color: CustomTheme.secondColor,
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   child: Container(
-                                    padding: EdgeInsets.all(20),
+                                    padding: const EdgeInsets.all(20),
                                     alignment: Alignment.center,
-                                    child: Text(
+                                    child: const Text(
                                       'send',
                                       style: CustomTheme.textWhite,
                                     ),
@@ -163,7 +163,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
                                 color: Colors.white,
                                 child: Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.all(20),
+                                  padding: const EdgeInsets.all(20),
                                   alignment: Alignment.center,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -186,7 +186,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
                                     Row(
                                       children: [
                                         Image.asset('assets/images/crown.png', width: 30),
-                                        Text(
+                                        const Text(
                                           '賦能',
                                           style: CustomTheme.textWhite,
                                         ),
@@ -214,20 +214,20 @@ class _NftDetailPageState extends State<NftDetailPage> {
   Widget _metaDataBox() {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
         decoration: BoxDecoration(
           color: CustomTheme.bgSecondColor,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
+          children: const [
+            Text(
               'Name',
               style: CustomTheme.textPrimary,
             ),
-            const SizedBox(height: 10),
-            const Text(
+            SizedBox(height: 10),
+            Text(
               '123',
               style: CustomTheme.textSmallWhite,
             ),
@@ -239,12 +239,12 @@ class _NftDetailPageState extends State<NftDetailPage> {
 
   Widget _metaDataTag() {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: CustomTheme.primaryColor,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(
+      child: const Text(
         '# body1',
         style: CustomTheme.textBlack,
       ),
