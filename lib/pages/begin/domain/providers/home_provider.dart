@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/provider/shared_provider.dart';
 import '../../../../core/util/web3/abi/stream_chicken_2.g.dart';
@@ -44,16 +43,29 @@ class TransferCoinNotifier extends StateNotifier<TransferCoinState> {
 
 ///
 final transferNFTProvider = StateNotifierProvider<TransferNFTNotifier, TransferNFTState>((ref) {
-  return TransferNFTNotifier();
+  WalletHelper walletHelper = ref.watch(walletHelperProvider);
+  return TransferNFTNotifier(walletHelper: walletHelper);
 });
 
 class TransferNFTNotifier extends StateNotifier<TransferNFTState> {
-  TransferNFTNotifier() : super(const TransferNFTState.init());
+  final WalletHelper walletHelper;
+  TransferNFTNotifier({required this.walletHelper}) : super(const TransferNFTState.data());
 
-  void transferNFT({
+  Future<void> transferNFT({
     required Stream_chicken_2 contract,
-    required String fromAddress,
-    required String toAddress,
     required int nftTokenId,
-  }) {}
+    required String toAddress,
+  }) async {
+    state = const TransferNFTState.loading();
+    try {
+      final String transactionHash = await walletHelper.transferNFT(
+        contract: contract,
+        toAddress: toAddress,
+        nftTokenId: nftTokenId,
+      );
+      state = const TransferNFTState.data();
+    } catch (e) {
+      state = TransferNFTState.error(msg: e.toString());
+    }
+  }
 }

@@ -122,7 +122,11 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                     return Swiper(
                       controller: SwiperController(),
                       itemBuilder: (BuildContext context, int index) {
-                        return _WalletCard(index: index);
+                        final WalletInfo walletInfo = walletList[index];
+                        return _WalletCard(
+                          index: index,
+                          walletInfo: walletInfo,
+                        );
                       },
                       itemCount: walletList.length,
                       viewportFraction: 0.8,
@@ -230,9 +234,11 @@ class _WalletCard extends StatelessWidget {
   _WalletCard({
     Key? key,
     required this.index,
+    required this.walletInfo,
   }) : super(key: key);
 
   final int index;
+  final WalletInfo walletInfo;
 
   final List<String> walletBgs = [
     'assets/images/wallet-bg-01.png',
@@ -258,9 +264,7 @@ class _WalletCard extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: Consumer(builder: (context, ref, _) {
-              final List<WalletInfo> walletList = ref.watch(walletConnectedProvider);
-              final WalletInfo wallet = walletList[index];
-              final String imgPath = wallet.getSourceImagePath();
+              final String imgPath = walletInfo.getSourceImagePath();
 
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -272,7 +276,7 @@ class _WalletCard extends StatelessWidget {
                     ),
                   const SizedBox(width: 8.0),
                   Text(
-                    '${wallet.address.substring(0, 5)}...${wallet.address.substring(wallet.address.length - 3)}',
+                    '${walletInfo.address.substring(0, 5)}...${walletInfo.address.substring(walletInfo.address.length - 3)}',
                     style: CustomTheme.textBlack,
                   ),
                 ],
@@ -284,15 +288,10 @@ class _WalletCard extends StatelessWidget {
             children: [
               Image.asset('assets/images/eth-token.png', width: 20),
               const SizedBox(width: 10),
-              Consumer(builder: (context, ref, _) {
-                final List<WalletInfo> walletList = ref.watch(walletConnectedProvider);
-                final WalletInfo wallet = walletList[index];
-
-                return Text(
-                  "${wallet.etherAmount.toStringAsFixed(5)} eth",
-                  style: CustomTheme.textBlack,
-                );
-              }),
+              Text(
+                "${walletInfo.etherAmount.toStringAsFixed(4)} eth",
+                style: CustomTheme.textBlack,
+              ),
             ],
           ),
           const SizedBox(height: 10),

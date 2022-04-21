@@ -3,11 +3,8 @@ import 'dart:io';
 
 import 'package:decimal/decimal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nft_wallet/core/util/web3/deeplink_util.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../../pages/begin/data/models/crypto_wallet_link.dart';
 import '../../../pages/begin/data/models/nft_info.dart';
 import '../../../pages/begin/data/models/token_info.dart';
 import '../../../pages/begin/data/models/wallet_info.dart';
@@ -17,6 +14,7 @@ import '../theme.dart';
 import 'WalletConnectEthereumCredentials.dart';
 import 'abi/erc20.g.dart';
 import 'abi/stream_chicken_2.g.dart';
+import 'deeplink_util.dart';
 import 'eth_conversions.dart';
 import 'metamask_wallet_connect_helper.dart';
 
@@ -40,6 +38,12 @@ class WalletHelper {
     return doubleAmount;
   }
 
+  Future<EtherAmount> getGasPrice() async {
+    final Web3Client web3client = ref.read(web3ClientProvider);
+    final EtherAmount gasPrice = await web3client.getGasPrice();
+    return gasPrice;
+  }
+
   Future<List<TokenInfo>> getCoinTokenData({required final String walletAddress}) async {
     double etherAmount = await getEtherAmount(walletAddress: walletAddress);
     etherAmount = Decimal.parse(etherAmount.toString()).toDouble();
@@ -57,7 +61,9 @@ class WalletHelper {
     final List<Erc20> erc20ContractList = ref.read(coinContractListProvider);
     for (Erc20 contract in erc20ContractList) {
       final String coinName = await contract.name();
-      double coinAmount = (await contract.balanceOf(EthereumAddress.fromHex(walletAddress))).toDecimal().toDouble();
+      BigInt balance = await contract.balanceOf(EthereumAddress.fromHex(walletAddress));
+      // 轉為正常單位
+      double coinAmount = EtherAmount.fromUnitAndValue(EtherUnit.wei, balance).getValueInUnit(EtherUnit.ether);
       coinAmount = Decimal.parse(coinAmount.toString()).toDouble();
 
       final TokenInfo tokenInfo = TokenInfo(
@@ -138,6 +144,7 @@ class WalletHelper {
       name: collectionName,
       tokenName: collectionName,
       nftInfoList: nftInfoList,
+      contract: contract,
     );
     return collection;
   }
@@ -156,6 +163,7 @@ class WalletHelper {
       throw Web3Exception(msg: '錢包有問題，無法進行轉帳');
     }
 
+    // 錢包位址
     late EthereumAddress fromEthereumAddress;
     late EthereumAddress toEthereumAddress;
     try {
@@ -168,7 +176,7 @@ class WalletHelper {
     BigInt weiBiAmount = EthConversions.ethToWeiBi(amount);
 
     try {
-      if (tokenInfo == null) {
+      if (tokenInfo == null || tokenInfo.isEther) {
         // 以太幣
         if (walletInfo.isFromMetamask) {
           // 連結錢包轉帳
@@ -185,9 +193,10 @@ class WalletHelper {
         // 其他貨幣
         Erc20? erc20Contract = tokenInfo.contract;
         if (erc20Contract != null) {
+          // 證書，根據不同的匯入方式取得
           late Credentials credentials;
           if (walletInfo.isFromMetamask) {
-            // Metamask
+            // 開啟Metamask app
             await DeeplinkUtil.openMetamask();
 
             final MetamaskWalletConnectHelper helper = ref.read(metamaskWalletConnectHelperProvider);
@@ -197,6 +206,8 @@ class WalletHelper {
             credentials = getEthPrivateKeyCredentials(privateKey: walletInfo.privateKey);
           }
 
+          // 進行交易
+          EtherAmount gasPrice = await getGasPrice();
           transactionHash = await erc20Contract.transfer(
             toEthereumAddress,
             weiBiAmount,
@@ -204,7 +215,7 @@ class WalletHelper {
             transaction: Transaction(
               from: fromEthereumAddress,
               to: toEthereumAddress,
-              value: EtherAmount.zero(),
+              gasPrice: gasPrice,
             ),
           );
         } else {
@@ -212,7 +223,7 @@ class WalletHelper {
         }
       }
     } catch (e) {
-      throw Web3Exception(msg: '轉帳有問題，請稍候再試試');
+      throw Web3Exception(msg: '轉帳有問題，請稍候再試');
     }
 
     return transactionHash;
@@ -224,9 +235,13 @@ class WalletHelper {
     required BigInt amount,
   }) async {
     final MetamaskWalletConnectHelper helper = ref.read(metamaskWalletConnectHelperProvider);
-    WalletConnectEthereumCredentials credentials = helper.getEthereumCredentials();
+    final WalletConnectEthereumCredentials credentials = helper.getEthereumCredentials();
     final Web3Client web3client = ref.read(web3ClientProvider);
 
+    // 開啟Metamask app
+    await DeeplinkUtil.openMetamask();
+
+    // 進行交易
     Transaction transaction = Transaction(
       from: fromEthereumAddress,
       to: toEthereumAddress,
@@ -235,9 +250,55 @@ class WalletHelper {
         amount,
       ),
     );
-
-    await DeeplinkUtil.openMetamask();
     final String transactionHash = await web3client.sendTransaction(credentials, transaction);
+
+    return transactionHash;
+  }
+
+  Future<String> transferNFT({
+    required Stream_chicken_2 contract,
+    required String toAddress,
+    required int nftTokenId,
+  }) async {
+    final WalletInfo? walletInfo = ref.read(currentWalletProvider);
+    if (walletInfo == null) {
+      throw Web3Exception(msg: '錢包有問題，無法進行轉帳');
+    }
+
+    // 錢包位址
+    late EthereumAddress fromEthereumAddress;
+    late EthereumAddress toEthereumAddress;
+    try {
+      fromEthereumAddress = EthereumAddress.fromHex(walletInfo.address);
+      toEthereumAddress = EthereumAddress.fromHex(toAddress);
+    } catch (e) {
+      throw Web3Exception(msg: '錢包的地址格式有問題，無法進行轉帳');
+    }
+
+    // 開啟Metamask app
+    await DeeplinkUtil.openMetamask();
+
+    // 取得錢包證書
+    final MetamaskWalletConnectHelper helper = ref.read(metamaskWalletConnectHelperProvider);
+    final WalletConnectEthereumCredentials credentials = helper.getEthereumCredentials();
+
+    // 進行交易
+    String transactionHash = '';
+    try {
+      final Transaction transaction = Transaction(
+        from: fromEthereumAddress,
+        to: toEthereumAddress,
+      );
+      transactionHash = await contract.safeTransferFrom(
+        fromEthereumAddress,
+        toEthereumAddress,
+        BigInt.from(nftTokenId),
+        credentials: credentials,
+        transaction: transaction,
+      );
+    } catch (e) {
+      throw Web3Exception(msg: 'NFT轉移有問題，請稍候再試');
+    }
 
     return transactionHash;
   }

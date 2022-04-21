@@ -1,17 +1,32 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nft_wallet/pages/begin/presentation/dialogs/transfer_nft_dialog.dart';
 import 'package:simple_animations/simple_animations.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/util/theme.dart';
-import '../dialogs/transfer_coin_dialog.dart';
+import '../../data/models/nft_info.dart';
+import '../dialogs/transfer_nft_dialog.dart';
 import '../widgets/common_button.dart';
 
 class NftDetailPage extends StatefulWidget {
-  const NftDetailPage({Key? key}) : super(key: key);
+  const NftDetailPage({
+    Key? key,
+    required this.nftCollection,
+    required this.nftInfo,
+  }) : super(key: key);
 
-  static void show(BuildContext context) {
-    Navigator.of(context).push(slideRoute(const NftDetailPage()));
+  final NFTCollection nftCollection;
+  final NFTInfo nftInfo;
+
+  static void show(
+    BuildContext context, {
+    required NFTCollection nftCollection,
+    required NFTInfo nftInfo,
+  }) {
+    Navigator.of(context).push(slideRoute(NftDetailPage(
+      nftCollection: nftCollection,
+      nftInfo: nftInfo,
+    )));
   }
 
   @override
@@ -19,33 +34,16 @@ class NftDetailPage extends StatefulWidget {
 }
 
 class _NftDetailPageState extends State<NftDetailPage> {
+  NFTCollection get nftCollection => widget.nftCollection;
+  NFTInfo get nftInfo => widget.nftInfo;
+
   double screenOpacity = 0;
 
-  List<Widget> warframeList() {
-    return List<Widget>.generate(
-      6,
-      (index) => Padding(
-        padding: const EdgeInsets.only(bottom: 15.0),
-        child: CommonButton(
-          onPress: () {},
-          color: Colors.white,
-          child: Container(
-            padding: const EdgeInsets.all(5),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(
-                  'assets/images/ck-${index + 1}.png',
-                  height: 40,
-                ),
-                const SizedBox(width: 5),
-                const Text('我是賦能', style: CustomTheme.textBlack),
-              ],
-            ),
-          ),
-        ),
-      ),
+  Future<void> _showTransferNFTDialog() async {
+    await TransferNFTDialog.show(
+      context,
+      contract: nftCollection.contract,
+      nftInfo: nftInfo,
     );
   }
 
@@ -93,9 +91,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
                       ),
                       height: 240,
                       width: double.infinity,
-                      child: Image.asset(
-                        'assets/images/ck-1.png',
-                      ),
+                      child: CachedNetworkImage(imageUrl: widget.nftInfo.imgPath, fit: BoxFit.cover),
                     ),
                     Expanded(
                       child: SingleChildScrollView(
@@ -106,46 +102,52 @@ class _NftDetailPageState extends State<NftDetailPage> {
                             children: [
                               Row(
                                 children: [
-                                  _metaDataBox(),
+                                  _InfoBox(
+                                    title: 'Name',
+                                    text: "${nftCollection.tokenName} #${nftInfo.tokenId}",
+                                  ),
                                   const SizedBox(width: 15),
-                                  _metaDataBox(),
+                                  _InfoBox(
+                                    title: 'Collection',
+                                    text: nftCollection.name,
+                                  ),
                                   const SizedBox(width: 15),
-                                  _metaDataBox(),
+                                  const _InfoBox(
+                                    title: 'Total Supply',
+                                    text: '-',
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 25),
                               Wrap(
                                 spacing: 5,
                                 runSpacing: 5,
-                                children: [
-                                  _metaDataTag(),
-                                  _metaDataTag(),
-                                  _metaDataTag(),
-                                  _metaDataTag(),
-                                  _metaDataTag(),
-                                  _metaDataTag(),
+                                children: const [
+                                  _Tag(text: 'level1'),
+                                  _Tag(text: 'gold'),
+                                  _Tag(text: 'hair'),
+                                  _Tag(text: 'girl'),
+                                  _Tag(text: 'damn'),
                                 ],
                               ),
                               const SizedBox(height: 25),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     'Address',
                                     style: CustomTheme.textSmallPrimary,
                                   ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
+                                  const SizedBox(height: 5),
                                   Text(
-                                    '0x899bd466D50e861351fb1fAa303CaB08Bdb03725',
+                                    nftCollection.contract.self.address.toString(),
                                     style: CustomTheme.textSmallWhite,
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 25),
                               CommonButton(
-                                onPress: () => TransferNFTDialog.show(context),
+                                onPress: () => _showTransferNFTDialog(),
                                 color: CustomTheme.secondColor,
                                 child: SizedBox(
                                   width: double.infinity,
@@ -194,7 +196,10 @@ class _NftDetailPageState extends State<NftDetailPage> {
                                         ),
                                       ],
                                     ),
-                                    ...warframeList()
+                                    ...List<Widget>.generate(
+                                      6,
+                                      (index) => _FunctionalityItem(imgPath: 'assets/images/ck-${index + 1}.png'),
+                                    )
                                   ],
                                 ),
                               )
@@ -212,8 +217,73 @@ class _NftDetailPageState extends State<NftDetailPage> {
       },
     );
   }
+}
 
-  Widget _metaDataBox() {
+class _FunctionalityItem extends StatelessWidget {
+  const _FunctionalityItem({Key? key, required this.imgPath}) : super(key: key);
+
+  final String imgPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15.0),
+      child: CommonButton(
+        onPress: () {},
+        color: Colors.white,
+        child: Container(
+          padding: const EdgeInsets.all(5),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.asset(
+                imgPath,
+                height: 40,
+              ),
+              const SizedBox(width: 5),
+              const Text('我是賦能', style: CustomTheme.textBlack),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Tag extends StatelessWidget {
+  const _Tag({Key? key, required this.text}) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: CustomTheme.primaryColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        '#$text',
+        style: CustomTheme.textBlack,
+      ),
+    );
+  }
+}
+
+class _InfoBox extends StatelessWidget {
+  const _InfoBox({
+    Key? key,
+    required this.title,
+    required this.text,
+  }) : super(key: key);
+
+  final String title;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
@@ -223,32 +293,18 @@ class _NftDetailPageState extends State<NftDetailPage> {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Text(
-              'Name',
+              title,
               style: CustomTheme.textPrimary,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 8.0),
             Text(
-              '123',
+              text,
               style: CustomTheme.textSmallWhite,
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _metaDataTag() {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: CustomTheme.primaryColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: const Text(
-        '# body1',
-        style: CustomTheme.textBlack,
       ),
     );
   }

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/util/web3/abi/stream_chicken_2.g.dart';
+
 class NFTCollection {
   final List<NFTInfo> nftInfoList;
   final String name;
   final String tokenName;
+  final Stream_chicken_2 contract;
 
   NFTCollection({
     required this.nftInfoList,
     required this.name,
     required this.tokenName,
+    required this.contract,
   });
 }
 

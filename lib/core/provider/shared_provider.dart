@@ -36,8 +36,7 @@ Provider<MetamaskWalletConnectHelper> metamaskWalletConnectHelperProvider = Prov
 );
 
 /// 已連結的錢包資訊
-final StateNotifierProvider<WalletConnectedNotifier, List<WalletInfo>> walletConnectedProvider =
-    StateNotifierProvider<WalletConnectedNotifier, List<WalletInfo>>((ref) {
+final walletConnectedProvider = StateNotifierProvider<WalletConnectedNotifier, List<WalletInfo>>((ref) {
   final Web3Client web3client = ref.read(web3ClientProvider);
   return WalletConnectedNotifier(web3client: web3client);
 });
@@ -119,7 +118,7 @@ class LoadCoinDataNotifier extends StateNotifier<LoadCoinState> {
       }
 
       // 更新已連結的錢包資料、UI
-      walletConnectedNotifier.state = walletInfoList;
+      walletConnectedNotifier.state = [...walletInfoList];
     } catch (e) {
       state = const LoadCoinState.error(msg: 'loadCoinData() - error');
     }
@@ -229,8 +228,11 @@ Provider<List<Stream_chicken_2>> nftContractListProvider = Provider<List<Stream_
     final List<Stream_chicken_2> result = [];
     for (String contractAddress in contractAddressList) {
       final EthereumAddress ethereumAddress = EthereumAddress.fromHex(contractAddress);
-      Stream_chicken_2 contract =
-          Stream_chicken_2(address: ethereumAddress, client: web3client, chainId: Constant.rinkebyChainId);
+      Stream_chicken_2 contract = Stream_chicken_2(
+        address: ethereumAddress,
+        client: web3client,
+        chainId: Constant.rinkebyChainId,
+      );
       result.add(contract);
     }
 

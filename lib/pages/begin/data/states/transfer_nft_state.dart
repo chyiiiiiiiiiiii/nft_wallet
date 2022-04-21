@@ -8,6 +8,6 @@ part 'transfer_nft_state.freezed.dart';
 class TransferNFTState with _$TransferNFTState {
   const factory TransferNFTState.init() = TransferNFTInitial;
   const factory TransferNFTState.loading() = TransferNFTLoading;
-  const factory TransferNFTState.data({required WalletInfo walletInfo}) = TransferNFTData;
+  const factory TransferNFTState.data() = TransferNFTData;
   const factory TransferNFTState.error({required String msg}) = TransferNFTError;
 }

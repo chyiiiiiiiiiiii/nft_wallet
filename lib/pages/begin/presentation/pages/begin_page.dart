@@ -62,18 +62,17 @@ class BeginPage extends StatelessWidget {
                   child: Consumer(builder: (context, ref, _) {
                     return CommonButton(
                       onPress: () => onTapStart(context: context, ref: ref),
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
                         children: [
                           Image.asset(
                             'assets/images/chicken-btn.png',
-                            width: 51,
+                            width: 48,
                           ),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              '直接開始',
-                              style: CustomTheme.textBlack,
-                            ),
+                          const SizedBox(width: 8.0),
+                          const Text(
+                            '直接開始',
+                            style: CustomTheme.textBlack,
                           ),
                           const Spacer(),
                           const Icon(
@@ -100,7 +99,7 @@ class BeginPage extends StatelessWidget {
 
                     return CommonButton(
                       onPress: () => ref.read(connectWalletProvider.notifier).connectWallet(),
-                      color: Color.fromRGBO(255, 255, 255, 1),
+                      color: const Color.fromRGBO(255, 255, 255, 1),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: ref.watch(connectWalletProvider).whenOrNull(

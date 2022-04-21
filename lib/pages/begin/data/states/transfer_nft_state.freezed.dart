@@ -26,10 +26,8 @@ class _$TransferNFTStateTearOff {
     return const TransferNFTLoading();
   }
 
-  TransferNFTData data({required WalletInfo walletInfo}) {
-    return TransferNFTData(
-      walletInfo: walletInfo,
-    );
+  TransferNFTData data() {
+    return const TransferNFTData();
   }
 
   TransferNFTError error({required String msg}) {
@@ -48,7 +46,7 @@ mixin _$TransferNFTState {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(WalletInfo walletInfo) data,
+    required TResult Function() data,
     required TResult Function(String msg) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,7 +54,7 @@ mixin _$TransferNFTState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -64,7 +62,7 @@ mixin _$TransferNFTState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) =>
@@ -156,7 +154,7 @@ class _$TransferNFTInitial implements TransferNFTInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(WalletInfo walletInfo) data,
+    required TResult Function() data,
     required TResult Function(String msg) error,
   }) {
     return init();
@@ -167,7 +165,7 @@ class _$TransferNFTInitial implements TransferNFTInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
   }) {
     return init?.call();
@@ -178,7 +176,7 @@ class _$TransferNFTInitial implements TransferNFTInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
@@ -273,7 +271,7 @@ class _$TransferNFTLoading implements TransferNFTLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(WalletInfo walletInfo) data,
+    required TResult Function() data,
     required TResult Function(String msg) error,
   }) {
     return loading();
@@ -284,7 +282,7 @@ class _$TransferNFTLoading implements TransferNFTLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
   }) {
     return loading?.call();
@@ -295,7 +293,7 @@ class _$TransferNFTLoading implements TransferNFTLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
@@ -352,7 +350,6 @@ abstract class $TransferNFTDataCopyWith<$Res> {
   factory $TransferNFTDataCopyWith(
           TransferNFTData value, $Res Function(TransferNFTData) then) =
       _$TransferNFTDataCopyWithImpl<$Res>;
-  $Res call({WalletInfo walletInfo});
 }
 
 /// @nodoc
@@ -365,60 +362,36 @@ class _$TransferNFTDataCopyWithImpl<$Res>
 
   @override
   TransferNFTData get _value => super._value as TransferNFTData;
-
-  @override
-  $Res call({
-    Object? walletInfo = freezed,
-  }) {
-    return _then(TransferNFTData(
-      walletInfo: walletInfo == freezed
-          ? _value.walletInfo
-          : walletInfo // ignore: cast_nullable_to_non_nullable
-              as WalletInfo,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$TransferNFTData implements TransferNFTData {
-  const _$TransferNFTData({required this.walletInfo});
-
-  @override
-  final WalletInfo walletInfo;
+  const _$TransferNFTData();
 
   @override
   String toString() {
-    return 'TransferNFTState.data(walletInfo: $walletInfo)';
+    return 'TransferNFTState.data()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is TransferNFTData &&
-            const DeepCollectionEquality()
-                .equals(other.walletInfo, walletInfo));
+        (other.runtimeType == runtimeType && other is TransferNFTData);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(walletInfo));
-
-  @JsonKey(ignore: true)
-  @override
-  $TransferNFTDataCopyWith<TransferNFTData> get copyWith =>
-      _$TransferNFTDataCopyWithImpl<TransferNFTData>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(WalletInfo walletInfo) data,
+    required TResult Function() data,
     required TResult Function(String msg) error,
   }) {
-    return data(walletInfo);
+    return data();
   }
 
   @override
@@ -426,10 +399,10 @@ class _$TransferNFTData implements TransferNFTData {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
   }) {
-    return data?.call(walletInfo);
+    return data?.call();
   }
 
   @override
@@ -437,12 +410,12 @@ class _$TransferNFTData implements TransferNFTData {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (data != null) {
-      return data(walletInfo);
+      return data();
     }
     return orElse();
   }
@@ -486,13 +459,7 @@ class _$TransferNFTData implements TransferNFTData {
 }
 
 abstract class TransferNFTData implements TransferNFTState {
-  const factory TransferNFTData({required WalletInfo walletInfo}) =
-      _$TransferNFTData;
-
-  WalletInfo get walletInfo;
-  @JsonKey(ignore: true)
-  $TransferNFTDataCopyWith<TransferNFTData> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory TransferNFTData() = _$TransferNFTData;
 }
 
 /// @nodoc
@@ -562,7 +529,7 @@ class _$TransferNFTError implements TransferNFTError {
   TResult when<TResult extends Object?>({
     required TResult Function() init,
     required TResult Function() loading,
-    required TResult Function(WalletInfo walletInfo) data,
+    required TResult Function() data,
     required TResult Function(String msg) error,
   }) {
     return error(msg);
@@ -573,7 +540,7 @@ class _$TransferNFTError implements TransferNFTError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
   }) {
     return error?.call(msg);
@@ -584,7 +551,7 @@ class _$TransferNFTError implements TransferNFTError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? init,
     TResult Function()? loading,
-    TResult Function(WalletInfo walletInfo)? data,
+    TResult Function()? data,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
