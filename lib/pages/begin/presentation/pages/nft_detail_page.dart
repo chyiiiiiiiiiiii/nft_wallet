@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:nft_wallet/pages/begin/presentation/dialogs/transfer_nft_dialog.dart';
 import 'package:simple_animations/simple_animations.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/util/theme.dart';
+import '../dialogs/transfer_coin_dialog.dart';
 import '../widgets/common_button.dart';
 
 class NftDetailPage extends StatefulWidget {
@@ -143,7 +145,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
                               ),
                               const SizedBox(height: 25),
                               CommonButton(
-                                onPress: () {},
+                                onPress: () => TransferNFTDialog.show(context),
                                 color: CustomTheme.secondColor,
                                 child: SizedBox(
                                   width: double.infinity,

@@ -7,13 +7,16 @@ import '../../../../core/provider/shared_provider.dart';
 import '../../../../core/util/theme.dart';
 import '../../data/models/token_info.dart';
 import '../../data/models/wallet_info.dart';
+import '../../data/states/load_coin_state.dart';
+import '../../data/states/load_nft_state.dart';
 import '../dialogs/add_wallet_dialog.dart';
-import '../dialogs/transfer_money_dialog.dart';
+import '../dialogs/transfer_coin_dialog.dart';
 import '../widgets/common_button.dart';
+import '../widgets/common_loading.dart';
 import '../widgets/home/nft_tab.dart';
 import '../widgets/home/token_tab.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
@@ -24,17 +27,26 @@ class HomePage extends StatefulWidget {
   }
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() {
+    return _HomePageState();
+  }
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
+
+  // 一開始先取得錢包相關資料，保持最新
+  void _loadData() {
+    ref.read(loadCoinDataProvider.notifier).loadCoinData();
+    ref.read(loadNFTDataProvider.notifier).loadNFTData();
+  }
 
   void onTokenTransfer(TokenInfo tokenInfo) {}
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
+    _loadData();
     super.initState();
   }
 
@@ -80,13 +92,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           )
                         ],
                       ),
-                      GestureDetector(
-                        onTap: () => Navigator.of(context).pop(),
-                        child: const Text(
-                          'logOut',
-                          style: CustomTheme.textPrimary,
-                        ),
-                      )
+                      Consumer(builder: (context, ref, _) {
+                        return IconButton(
+                          onPressed: () {
+                            _loadData();
+                          },
+                          icon: const Icon(
+                            Icons.refresh_rounded,
+                            color: Colors.white,
+                          ),
+                        );
+                      }),
+                      // GestureDetector(
+                      //   onTap: () => Navigator.of(context).pop(),
+                      //   child: const Text(
+                      //     'logOut',
+                      //     style: CustomTheme.textPrimary,
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -156,19 +179,39 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           ),
                         ),
                         Expanded(
-                          child: Consumer(builder: (context, ref, _) {
-                            final WalletInfo walletInfo = ref.watch(currentWalletProvider);
-                            return TabBarView(
-                              controller: _tabController,
-                              children: [
-                                TokenTab(
-                                  tokenInfoList: walletInfo.tokenInfoList,
-                                  onTransfer: onTokenTransfer,
+                          child: Consumer(
+                            builder: (context, ref, _) {
+                              final WalletInfo? walletInfo = ref.watch(currentWalletProvider);
+                              final LoadCoinState loadCoinState = ref.watch(loadCoinDataProvider);
+                              final LoadNFTState loadNFTState = ref.watch(loadNFTDataProvider);
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TabBarView(
+                                  controller: _tabController,
+                                  children: [
+                                    SizedBox(
+                                      child: loadCoinState.whenOrNull(
+                                        loading: () => const CustomLoading(),
+                                        data: (tokenInfoList) => TokenTab(
+                                          tokenInfoList: walletInfo?.tokenInfoList ?? [],
+                                          onTransfer: onTokenTransfer,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      child: loadNFTState.whenOrNull(
+                                        loading: () => const CustomLoading(),
+                                        data: (nftCollectionList) => NFTTab(
+                                          nftCollectionList: walletInfo?.nftCollectionList ?? [],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                NFTTab(nftCollectionList: walletInfo.nftCollectionList),
-                              ],
-                            );
-                          }),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -254,13 +297,10 @@ class _WalletCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           CommonButton(
-            onPress: () => TransferMoneyDialog.show(context),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 6),
-              child: Text(
-                '轉帳',
-                style: CustomTheme.textBlack,
-              ),
+            onPress: () => TransferCoinDialog.show(context),
+            child: const Text(
+              '轉帳',
+              style: CustomTheme.textBlack,
             ),
           )
         ],

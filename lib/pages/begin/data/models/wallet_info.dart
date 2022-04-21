@@ -5,8 +5,9 @@ enum WalletImportMethod { metamask, privateKey, local }
 
 class WalletInfo {
   final String address;
+  final String privateKey;
   final WalletImportMethod importMethod;
-  late final double etherAmount;
+  double etherAmount;
 
   /// 貨幣
   List<TokenInfo> tokenInfoList = [];
@@ -16,8 +17,9 @@ class WalletInfo {
 
   WalletInfo({
     required this.address,
+    this.privateKey = '',
     required this.importMethod,
-    required this.etherAmount,
+    this.etherAmount = 0,
   });
 
   bool get isFromMetamask => importMethod == WalletImportMethod.metamask;

@@ -11,7 +11,7 @@ import 'deeplink_util.dart';
 
 /// WalletConnectHelper is an object for implement WalletConnect protocol for
 /// mobile apps using deep linking to connect with wallets.
-class WalletConnectHelper {
+class MetamaskWalletConnectHelper {
   static const String ethRinkebyTestnetEndpoints = 'https://rinkeby.infura.io/v3/e3090e47c3624aa3aa126fa7297bff9b';
 
   // mobile app info
@@ -24,7 +24,7 @@ class WalletConnectHelper {
   List<String> accounts = [];
 
   /// Connector using brigde 'https://bridge.walletconnect.org' by default.
-  WalletConnectHelper({this.bridge, required this.appInfo}) {
+  MetamaskWalletConnectHelper({this.bridge, required this.appInfo}) {
     connector = getWalletConnect();
   }
 

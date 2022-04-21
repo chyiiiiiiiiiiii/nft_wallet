@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/util/theme.dart';
@@ -16,14 +17,25 @@ class NFTTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: nftCollectionList.length,
       itemBuilder: (context, index) {
-        return _buildList(nftCollectionList[index]);
+        final NFTCollection nftCollection = nftCollectionList[index];
+        return _NFTCollectionItem(nftCollection: nftCollection);
       },
+      itemCount: nftCollectionList.length,
     );
   }
+}
 
-  Widget _buildList(NFTCollection nftCollection) {
+class _NFTCollectionItem extends StatelessWidget {
+  const _NFTCollectionItem({
+    Key? key,
+    required this.nftCollection,
+  }) : super(key: key);
+
+  final NFTCollection nftCollection;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 260,
       child: Column(
@@ -74,46 +86,64 @@ class NFTTab extends StatelessWidget {
                     itemCount: nftCollection.nftInfoList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          NftDetailPage.show(context);
-                        },
-                        child: Container(
-                          height: 170,
-                          width: 136,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: nftCollection.nftInfoList[index].bgColor,
-                            image: DecorationImage(image: AssetImage(nftCollection.nftInfoList[index].imgPath)),
-                          ),
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    CustomTheme.bgColor.withAlpha(190),
-                                    CustomTheme.bgColor.withAlpha(80),
-                                    CustomTheme.bgColor.withAlpha(0),
-                                    CustomTheme.bgColor.withAlpha(0),
-                                  ],
-                                )),
-                            alignment: Alignment.bottomLeft,
-                            child: Text(
-                              "#${nftCollection.nftInfoList[index].tokenId.toString()}",
-                              style: CustomTheme.textWhite,
-                            ),
-                          ),
-                        ),
-                      );
+                      final NFTInfo nftInfo = nftCollection.nftInfoList[index];
+                      return _NFTItem(nftInfo: nftInfo);
                     }),
               ),
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class _NFTItem extends StatelessWidget {
+  const _NFTItem({
+    Key? key,
+    required this.nftInfo,
+  }) : super(key: key);
+
+  final NFTInfo nftInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        NftDetailPage.show(context);
+      },
+      child: Container(
+        height: 170,
+        width: 136,
+        margin: const EdgeInsets.only(right: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: nftInfo.bgColor,
+          image: DecorationImage(
+            image: CachedNetworkImageProvider(nftInfo.imgPath),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  CustomTheme.bgColor.withAlpha(190),
+                  CustomTheme.bgColor.withAlpha(80),
+                  CustomTheme.bgColor.withAlpha(0),
+                  CustomTheme.bgColor.withAlpha(0),
+                ],
+              )),
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            "#${nftInfo.tokenId.toString()}",
+            style: CustomTheme.textWhite,
+          ),
+        ),
       ),
     );
   }

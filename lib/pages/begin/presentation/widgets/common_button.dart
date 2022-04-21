@@ -5,11 +5,13 @@ import '../../../../core/util/theme.dart';
 class CommonButton extends StatefulWidget {
   const CommonButton({
     Key? key,
+    this.padding,
     this.color = CustomTheme.primaryColor,
     required this.onPress,
     required this.child,
   }) : super(key: key);
 
+  final EdgeInsets? padding;
   final Color color;
   final Widget child;
   final Function() onPress;
@@ -37,7 +39,7 @@ class _CommonButtonState extends State<CommonButton> {
     return GestureDetector(
       onTap: widget.onPress,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
         decoration: _getDecoration(),
         child: widget.child,
       ),

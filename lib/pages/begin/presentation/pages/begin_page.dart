@@ -9,7 +9,7 @@ import '../../domain/providers/begin_provider.dart';
 import '../widgets/common_button.dart';
 import 'home_page.dart';
 
-class BeginPage extends ConsumerWidget {
+class BeginPage extends StatelessWidget {
   const BeginPage({Key? key}) : super(key: key);
 
   void onTapStart({
@@ -45,7 +45,9 @@ class BeginPage extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
       backgroundColor: CustomTheme.bgColor,
       body: SafeArea(
@@ -98,9 +100,9 @@ class BeginPage extends ConsumerWidget {
 
                     return CommonButton(
                       onPress: () => ref.read(connectWalletProvider.notifier).connectWallet(),
-                      color: Colors.white,
+                      color: Color.fromRGBO(255, 255, 255, 1),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: ref.watch(connectWalletProvider).whenOrNull(
                               init: () => Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -139,7 +141,7 @@ class BeginPage extends ConsumerWidget {
                       onPress: () => ref.read(importWalletProvider.notifier).importWallet(),
                       color: CustomTheme.secondColor,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         child: ref.watch(importWalletProvider).whenOrNull(
                               init: () => Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../../pages/begin/data/models/crypto_wallet_link.dart';
 
 class DeeplinkUtil {
@@ -15,4 +17,9 @@ class DeeplinkUtil {
       return uri;
     }
   }
+
+  static Future<void> openMetamask() async {
+      await launch(CryptoWalletLink.metamask.universalLink, forceSafariVC: false);
+  }
+
 }

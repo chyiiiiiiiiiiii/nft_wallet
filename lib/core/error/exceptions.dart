@@ -8,7 +8,7 @@ class ServerException implements Exception {
       case 1001:
         break;
       default:
-        message = 'get server data - error';
+        message = 'ServerException - error';
     }
     return message;
   }
@@ -22,6 +22,17 @@ class ServerException implements Exception {
 class CacheException implements Exception {
   @override
   String toString() {
-    return 'get cache data - error';
+    return 'CacheException - error';
+  }
+}
+
+class Web3Exception implements Exception {
+  String? msg;
+
+  Web3Exception({this.msg});
+
+  @override
+  String toString() {
+    return msg ?? 'Web3Exception - error';
   }
 }
