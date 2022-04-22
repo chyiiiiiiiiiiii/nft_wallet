@@ -5,7 +5,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../../../pages/begin/data/models/nft_info.dart';
+import '../../../pages/begin/data/models/nft.dart';
 import '../../../pages/begin/data/models/token_info.dart';
 import '../../../pages/begin/data/models/wallet_info.dart';
 import '../../error/exceptions.dart';
@@ -134,7 +134,6 @@ class WalletHelper {
       (int index) => NFTInfo(
         tokenId: ownTokenIdList[index],
         imgPath: nftImageUrlList[index],
-        bgColor: CustomTheme.nftBgColors[index % 3],
       ),
       growable: true,
     );

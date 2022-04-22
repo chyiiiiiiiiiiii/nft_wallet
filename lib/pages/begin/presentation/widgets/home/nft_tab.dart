@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../core/util/theme.dart';
-import '../../../data/models/nft_info.dart';
+import '../../../data/models/nft.dart';
 import '../../pages/nft_detail_page.dart';
 
 class NFTTab extends StatelessWidget {
@@ -118,7 +120,7 @@ class _NFTItem extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: nftInfo.bgColor,
+        color: CustomTheme.nftBgColors[Random().nextInt(2) % 3],
         image: DecorationImage(
           image: CachedNetworkImageProvider(nftInfo.imgPath),
           fit: BoxFit.cover,

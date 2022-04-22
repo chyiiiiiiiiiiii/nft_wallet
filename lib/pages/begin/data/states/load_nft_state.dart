@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../models/nft_info.dart';
+import '../models/nft.dart';
 
 
 part 'load_nft_state.freezed.dart';

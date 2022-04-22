@@ -1,4 +1,4 @@
-import 'nft_info.dart';
+import 'nft.dart';
 import 'token_info.dart';
 
 enum WalletImportMethod { metamask, privateKey, local }

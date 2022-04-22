@@ -4,7 +4,7 @@ import 'package:simple_animations/simple_animations.dart';
 
 import '../../../../core/router/router.dart';
 import '../../../../core/util/theme.dart';
-import '../../data/models/nft_info.dart';
+import '../../data/models/nft.dart';
 import '../dialogs/transfer_nft_dialog.dart';
 import '../widgets/common_button.dart';
 
@@ -149,15 +149,12 @@ class _NftDetailPageState extends State<NftDetailPage> {
                               CommonButton(
                                 onPress: () => _showTransferNFTDialog(),
                                 color: CustomTheme.secondColor,
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(20),
-                                    alignment: Alignment.center,
-                                    child: const Text(
-                                      'send',
-                                      style: CustomTheme.textWhite,
-                                    ),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'Transfer',
+                                    style: CustomTheme.textWhite,
                                   ),
                                 ),
                               ),
@@ -165,15 +162,13 @@ class _NftDetailPageState extends State<NftDetailPage> {
                               CommonButton(
                                 onPress: () {},
                                 color: Colors.white,
-                                child: Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.all(20),
-                                  alignment: Alignment.center,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Image.asset('assets/images/opensea.png', width: 24),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 8),
                                       const Text('Sell on Opensea', style: CustomTheme.textBlack),
                                     ],
                                   ),

@@ -8,7 +8,7 @@ import 'package:nft_wallet/pages/begin/domain/providers/home_provider.dart';
 import '../../../../core/provider/shared_provider.dart';
 import '../../../../core/util/theme.dart';
 import '../../../../core/util/web3/abi/stream_chicken_2.g.dart';
-import '../../data/models/nft_info.dart';
+import '../../data/models/nft.dart';
 import '../../data/models/wallet_info.dart';
 import '../widgets/common_button.dart';
 import '../widgets/common_loading.dart';
