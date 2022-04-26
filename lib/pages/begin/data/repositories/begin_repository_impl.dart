@@ -1,12 +1,7 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-
 import '../../../../core/network/network_connection.dart';
 import '../../domain/repositories/begin_repository.dart';
 import '../datasources/begin_local_data_source.dart';
 import '../datasources/begin_remote_data_source.dart';
-import '../models/nft.dart';
 import '../models/user.dart';
 
 class BeginRepositoryImpl implements BeginRepository {
@@ -39,5 +34,5 @@ class BeginRepositoryImpl implements BeginRepository {
   //   final data = const JsonDecoder().convert(response.data);
   //   return NFTAttributes.fromJson(data);
   // }
-  
+
 }
