@@ -3,7 +3,7 @@
 ## Introduction
 此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去
 
-# Finish
+## Finish
 - [x] 連結錢包，Metamask、匯入私鑰
 - [x] 切換多個錢包
 - [x] 提供測試鏈上的ERC20合約，ETH、USDT
@@ -14,7 +14,7 @@
 - [x] 轉移貨幣
 - [x] 轉移NFT
 
-# Usage
+## Usage
 - [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
 - [walletconnect_dart](walletconnect_dart)
 - [web3dart](https://pub.dev/packages/web3dart)
