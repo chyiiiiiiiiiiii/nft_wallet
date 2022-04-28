@@ -6,6 +6,7 @@ import '../../../../core/provider/shared_provider.dart';
 import '../../../../core/util/theme.dart';
 import '../../data/states/begin_state.dart';
 import '../../domain/providers/begin_provider.dart';
+import '../dialogs/add_wallet_dialog.dart';
 import '../widgets/common_button.dart';
 import 'home_page.dart';
 
@@ -16,7 +17,8 @@ class BeginPage extends StatelessWidget {
     required BuildContext context,
     required WidgetRef ref,
   }) {
-    if (ref.read(walletConnectedProvider.notifier).isWalletConnected) {
+    if (ref.read(walletConnectedProvider.notifier).isWalletConnected ||
+        ref.read(importWalletProvider.notifier).isConnectWallet) {
       HomePage.show(context);
     } else {
       Fluttertoast.showToast(msg: '請先連結或匯入錢包');
@@ -37,7 +39,9 @@ class BeginPage extends StatelessWidget {
     ref.listen<ConnectWalletState>(
       importWalletProvider,
       (previous, next) {
-        if (next is ConnectWalletError) {
+        if (next is ConnectWalletData) {
+          ref.read(walletConnectedProvider.notifier).addWallet(next.walletInfo);
+        } else if (next is ConnectWalletError) {
           Fluttertoast.showToast(msg: next.msg);
         }
       },
@@ -96,7 +100,6 @@ class BeginPage extends StatelessWidget {
                 children: [
                   Consumer(builder: (context, ref, _) {
                     listenConnectWallet(ref);
-
                     return CommonButton(
                       onPress: () => ref.read(connectWalletProvider.notifier).connectWallet(),
                       color: const Color.fromRGBO(255, 255, 255, 1),
@@ -135,9 +138,13 @@ class BeginPage extends StatelessWidget {
                   const SizedBox(height: 18),
                   Consumer(builder: (context, ref, _) {
                     listenImportWallet(ref);
-
                     return CommonButton(
-                      onPress: () => ref.read(importWalletProvider.notifier).importWallet(),
+                      onPress: () async {
+                        final privateKey = await AddWalletDialog.show(context) as String?;
+                        if (privateKey != null) {
+                          ref.read(importWalletProvider.notifier).importWallet(privateKey);
+                        }
+                      },
                       color: CustomTheme.secondColor,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
