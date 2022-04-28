@@ -3,7 +3,7 @@
 ## Introduction
 此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去
 
-# Function
+# Finish
 - [x] 連結錢包，Metamask、匯入私鑰
 - [x] 切換多個錢包
 - [x] 提供測試鏈上的ERC20合約，ETH、USDT
