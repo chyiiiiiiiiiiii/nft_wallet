@@ -12,8 +12,8 @@ class AddWalletDialog extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static Future<void> show(BuildContext context) async {
-    await showDialog<AddWalletDialog>(
+  static Future<dynamic> show(BuildContext context) async {
+    return showDialog<dynamic>(
       context: context,
       builder: (context) {
         return AddWalletDialog();
@@ -50,8 +50,6 @@ class AddWalletDialog extends StatelessWidget {
     privateKeyEditController.selection =
         TextSelection.fromPosition(TextPosition(offset: privateKeyEditController.text.length));
   }
-
-  void _onConfirm() {}
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +125,11 @@ class AddWalletDialog extends StatelessWidget {
             CommonTextField(textEditingController: privateKeyEditController),
             const SizedBox(height: 24.0),
             CommonButton(
-              onPress: () => _onConfirm(),
+              onPress: () {
+                if (privateKeyEditController.text.isNotEmpty) {
+                  Navigator.maybePop(context, privateKeyEditController.text);
+                }
+              },
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               color: CustomTheme.secondColor,
               child: const Text(

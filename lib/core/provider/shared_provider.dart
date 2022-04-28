@@ -267,21 +267,25 @@ class ImportWalletNotifier extends StateNotifier<ConnectWalletState> {
     HomePage.show(context);
   }
 
-  Future<void> importWallet() async {
-    // state = const ConnectWalletState.loading();
-    // isConnectWallet = true;
-    // if (isConnectWallet) {
-    //   String address = '';
-    //   final EtherAmount etherAmount = EtherAmount.zero();
-    //   final EthWallet wallet = EthWallet(
-    //     address: address,
-    //     importMethod: WalletImportMethod.metamask,
-    //     ethers: etherAmount.getValueInUnit(EtherUnit.ether),
-    //   );
+  Future<void> importWallet(String privateKey) async {
+    state = const ConnectWalletState.loading();
 
-    //   state = ConnectWalletState.data(wallet: wallet);
-    // } else {
-    //   state = const ConnectWalletState.error(msg: '無法匯入錢包，請再試一次');
-    // }
+    try {
+      final private = EthPrivateKey.fromHex(privateKey);
+      final address = await private.extractAddress();
+      isConnectWallet = true;
+      print('Eth Address: $address');
+
+      final WalletInfo wallet = WalletInfo(
+        address: address.toString(),
+        importMethod: WalletImportMethod.privateKey,
+        privateKey: privateKey,
+      );
+
+      state = ConnectWalletState.data(walletInfo: wallet);
+    } catch (e) {
+      isConnectWallet = false;
+      state = const ConnectWalletState.error(msg: '無法匯入錢包，請再試一次');
+    }
   }
 }
