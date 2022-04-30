@@ -1,5 +1,7 @@
 # nft_wallet
 
+<img src="media/demo.gif" width="300" height="648" />
+
 ## Introduction
 此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去
 
