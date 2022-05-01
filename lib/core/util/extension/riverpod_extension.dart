@@ -5,7 +5,7 @@ extension AsyncValueUI on AsyncValue {
   // isLoading shorthand (AsyncLoading is a subclass of AsycValue)
   bool get isLoading => this is AsyncLoading;
 
-  // show a snackbar on error only
+  // 在有錯誤狀態的時候觸發，顯示吐司條
   void showMessageOnError() => whenOrNull(
         error: (error, _) {
           Fluttertoast.showToast(msg: error.toString());

@@ -5,7 +5,6 @@ import 'package:matrix4_transform/matrix4_transform.dart';
 
 import '../../../../core/provider/shared_provider.dart';
 import '../../../../core/util/theme.dart';
-import '../../data/models/token_info.dart';
 import '../../data/models/wallet_info.dart';
 import '../../data/states/load_coin_state.dart';
 import '../../data/states/load_nft_state.dart';
@@ -33,18 +32,29 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderStateMixin {
+  late SwiperController _swiperController;
   late TabController _tabController;
 
-  // 一開始先取得錢包相關資料，保持最新
+  /// 一開始先取得錢包相關資料，保持最新
   void _loadData() {
     ref.read(loadCoinDataProvider.notifier).loadCoinData();
     ref.read(loadNFTDataProvider.notifier).loadNFTData();
   }
 
-  void onTokenTransfer(TokenInfo tokenInfo) {}
+  /// 匯入錢包
+  Future<void> _importWallet(
+    BuildContext context, {
+    required WidgetRef ref,
+  }) async {
+    final privateKey = await AddWalletDialog.show(context) as String?;
+    if (privateKey != null) {
+      ref.read(importWalletProvider.notifier).importWallet(privateKey: privateKey);
+    }
+  }
 
   @override
   void initState() {
+    _swiperController = SwiperController();
     _tabController = TabController(vsync: this, length: 2);
     _loadData();
     super.initState();
@@ -53,11 +63,14 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
   @override
   void dispose() {
     _tabController.dispose();
+    _swiperController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<WalletInfo> walletList = ref.watch(walletConnectedProvider);
+
     return WillPopScope(
       onWillPop: () async {
         return false;
@@ -76,66 +89,73 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          const Text(
-                            'Wallet',
-                            style: CustomTheme.textBoldWhite,
-                          ),
-                          const SizedBox(width: 5),
-                          GestureDetector(
-                            onTap: () => AddWalletDialog.show(context),
-                            child: const Icon(
-                              Icons.add_circle_outlined,
-                              color: CustomTheme.primaryColor,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Text(
+                              'Wallet',
+                              style: CustomTheme.textBoldWhite,
                             ),
-                          )
-                        ],
+                            const SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: () => _importWallet(context, ref: ref),
+                              child: const Icon(
+                                Icons.add_circle_outlined,
+                                color: CustomTheme.primaryColor,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                      Consumer(builder: (context, ref, _) {
-                        return IconButton(
-                          onPressed: () {
-                            _loadData();
-                          },
-                          icon: const Icon(
-                            Icons.refresh_rounded,
-                            color: Colors.white,
-                          ),
-                        );
-                      }),
-                      // GestureDetector(
-                      //   onTap: () => Navigator.of(context).pop(),
-                      //   child: const Text(
-                      //     'logOut',
-                      //     style: CustomTheme.textPrimary,
-                      //   ),
-                      // )
+                      Consumer(
+                        builder: (context, ref, _) {
+                          return IconButton(
+                            onPressed: () {
+                              _loadData();
+                            },
+                            icon: const Icon(
+                              Icons.refresh_rounded,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
+                      Consumer(
+                        builder: (context, ref, _) {
+                          return IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(
+                              Icons.door_back_door,
+                              color: Colors.white,
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 15),
                 SizedBox(
                   height: 210,
-                  child: Consumer(builder: (context, ref, _) {
-                    final List<WalletInfo> walletList = ref.watch(walletConnectedProvider);
-
-                    return Swiper(
-                      controller: SwiperController(),
-                      itemBuilder: (BuildContext context, int index) {
-                        final WalletInfo walletInfo = walletList[index];
-                        return _WalletCard(
-                          index: index,
-                          walletInfo: walletInfo,
-                        );
-                      },
-                      itemCount: walletList.length,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                      onIndexChanged: (index) {
-                        ref.read(currentWalletIndexProvider.notifier).state = index;
-                      },
-                    );
-                  }),
+                  child: Swiper(
+                    controller: _swiperController,
+                    itemBuilder: (BuildContext context, int index) {
+                      final WalletInfo walletInfo = walletList[index];
+                      return _WalletCard(
+                        index: index,
+                        walletInfo: walletInfo,
+                      );
+                    },
+                    itemCount: walletList.length,
+                    viewportFraction: 0.8,
+                    scale: 0.9,
+                    onIndexChanged: (index) {
+                      // 更新目前的錢包索引
+                      ref.read(currentWalletIndexProvider.notifier).state = index;
+                      // 刷新
+                      _loadData();
+                    },
+                  ),
                 ),
                 const SizedBox(height: 30),
                 Expanded(
@@ -199,7 +219,6 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                                         loading: () => const CustomLoading(),
                                         data: (tokenInfoList) => TokenTab(
                                           tokenInfoList: walletInfo?.tokenInfoList ?? [],
-                                          onTransfer: onTokenTransfer,
                                         ),
                                       ),
                                     ),

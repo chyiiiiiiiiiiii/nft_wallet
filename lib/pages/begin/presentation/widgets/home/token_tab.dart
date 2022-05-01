@@ -7,12 +7,10 @@ import '../common_button.dart';
 
 class TokenTab extends StatelessWidget {
   final List<TokenInfo> tokenInfoList;
-  final Function(TokenInfo) onTransfer;
 
   const TokenTab({
     Key? key,
     required this.tokenInfoList,
-    required this.onTransfer,
   }) : super(key: key);
 
   @override
@@ -23,7 +21,6 @@ class TokenTab extends StatelessWidget {
       itemBuilder: (context, index) {
         final TokenInfo tokenInfo = tokenInfoList[index];
         return _CoinItem(
-          onTransfer: onTransfer,
           tokenInfo: tokenInfo,
         );
       },
@@ -34,11 +31,9 @@ class TokenTab extends StatelessWidget {
 class _CoinItem extends StatelessWidget {
   const _CoinItem({
     Key? key,
-    required this.onTransfer,
     required this.tokenInfo,
   }) : super(key: key);
 
-  final Function(TokenInfo p1) onTransfer;
   final TokenInfo tokenInfo;
 
   @override
@@ -52,7 +47,7 @@ class _CoinItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: CommonButton(
         color: Colors.white,
-        onPress: () => onTransfer(tokenInfo),
+        onPress: () {},
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 7),
           child: Row(

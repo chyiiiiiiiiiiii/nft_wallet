@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -8,7 +9,6 @@ import '../../pages/begin/data/models/wallet_info.dart';
 import '../../pages/begin/data/states/begin_state.dart';
 import '../../pages/begin/data/states/load_coin_state.dart';
 import '../../pages/begin/data/states/load_nft_state.dart';
-import '../../pages/begin/presentation/pages/home_page.dart';
 import '../util/constant.dart';
 import '../util/web3/abi/erc20.g.dart';
 import '../util/web3/abi/stream_chicken_2.g.dart';
@@ -51,10 +51,13 @@ class WalletConnectedNotifier extends StateNotifier<List<WalletInfo>> {
   Future<void> addWallet(WalletInfo walletInfo) async {
     final bool haveSameWallet = state.where((element) => element.address == walletInfo.address).isNotEmpty;
     if (haveSameWallet) {
+      Fluttertoast.showToast(msg: '此錢包已匯入過囉');
       return;
     }
+
+    // 檢查是不是已經有從Metamask連結過的錢包，有的話其他只能透過私鑰匯入
     final bool alreadyHaveEthWallet = state.where((element) => element.isFromMetamask).isNotEmpty;
-    if (alreadyHaveEthWallet) {
+    if (alreadyHaveEthWallet && walletInfo.isFromMetamask) {
       return;
     }
 
@@ -65,7 +68,7 @@ class WalletConnectedNotifier extends StateNotifier<List<WalletInfo>> {
     final double doubleAmount = etherAmount.getValueInUnit(EtherUnit.ether);
     walletInfo.etherAmount = doubleAmount;
 
-    state.add(walletInfo);
+    state = [...state, walletInfo];
   }
 
   void removeWallet(String walletAddress) {
@@ -77,7 +80,7 @@ class WalletConnectedNotifier extends StateNotifier<List<WalletInfo>> {
 }
 
 /// 刷新錢包的貨幣資料
-final loadCoinDataProvider = StateNotifierProvider<LoadCoinDataNotifier, LoadCoinState>((ref) {
+final loadCoinDataProvider = StateNotifierProvider.autoDispose<LoadCoinDataNotifier, LoadCoinState>((ref) {
   WalletConnectedNotifier walletConnectedNotifier = ref.watch(walletConnectedProvider.notifier);
   WalletHelper walletHelper = ref.watch(walletHelperProvider);
   String currentWalletAddress = ref.watch(currentWalletProvider)?.address ?? '';
@@ -126,7 +129,7 @@ class LoadCoinDataNotifier extends StateNotifier<LoadCoinState> {
 }
 
 /// 刷新錢包的NFT資料
-final loadNFTDataProvider = StateNotifierProvider<LoadNFTDataNotifier, LoadNFTState>((ref) {
+final loadNFTDataProvider = StateNotifierProvider.autoDispose<LoadNFTDataNotifier, LoadNFTState>((ref) {
   WalletConnectedNotifier walletConnectedNotifier = ref.watch(walletConnectedProvider.notifier);
   WalletHelper walletHelper = ref.watch(walletHelperProvider);
   String currentWalletAddress = ref.watch(currentWalletProvider)?.address ?? '';
@@ -245,47 +248,52 @@ Provider<WalletHelper> walletHelperProvider = Provider<WalletHelper>((ref) {
   return WalletHelper(ref: ref);
 });
 
+/// 匯入錢包、匯入PrivateKey
 final importWalletProvider = StateNotifierProvider<ImportWalletNotifier, ConnectWalletState>(
   (ref) {
     final Web3Client client = ref.read(web3ClientProvider);
+    final WalletConnectedNotifier walletConnectedNotifier = ref.watch(walletConnectedProvider.notifier);
     return ImportWalletNotifier(
       client: client,
+      walletConnectedNotifier: walletConnectedNotifier,
     );
   },
 );
 
 class ImportWalletNotifier extends StateNotifier<ConnectWalletState> {
   final Web3Client client;
+  final WalletConnectedNotifier walletConnectedNotifier;
 
   bool isConnectWallet = false;
 
   ImportWalletNotifier({
     required this.client,
+    required this.walletConnectedNotifier,
   }) : super(const ConnectWalletState.init());
 
-  void showHomePage(context) {
-    HomePage.show(context);
-  }
-
-  Future<void> importWallet(String privateKey) async {
+  Future<void> importWallet({required String privateKey}) async {
     state = const ConnectWalletState.loading();
 
     try {
-      final private = EthPrivateKey.fromHex(privateKey);
-      final address = await private.extractAddress();
+      final EthPrivateKey ethPrivateKey = EthPrivateKey.fromHex(privateKey);
+      final EthereumAddress address = await ethPrivateKey.extractAddress();
       isConnectWallet = true;
-      print('Eth Address: $address');
 
-      final WalletInfo wallet = WalletInfo(
+      final WalletInfo walletInfo = WalletInfo(
         address: address.toString(),
         importMethod: WalletImportMethod.privateKey,
         privateKey: privateKey,
       );
 
-      state = ConnectWalletState.data(walletInfo: wallet);
+      walletConnectedNotifier.addWallet(walletInfo);
+      state = ConnectWalletState.data(walletInfo: walletInfo);
     } catch (e) {
       isConnectWallet = false;
-      state = const ConnectWalletState.error(msg: '無法匯入錢包，請再試一次');
+      const String msg = '無法匯入錢包，請再試一次';
+
+      Fluttertoast.showToast(msg: msg);
+      state = const ConnectWalletState.error(msg: msg);
+      state = const ConnectWalletState.init();
     }
   }
 }

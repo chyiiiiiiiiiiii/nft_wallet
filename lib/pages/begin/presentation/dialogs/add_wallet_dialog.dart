@@ -21,12 +21,14 @@ class AddWalletDialog extends StatelessWidget {
     );
   }
 
-  final TextEditingController privateKeyEditController = TextEditingController();
-
+  /// 匯入方式
   final importMethodProvider = StateProvider<WalletImportMethod>((ref) {
     return WalletImportMethod.privateKey;
   });
 
+  final TextEditingController privateKeyEditController = TextEditingController();
+
+  /// 取得匯入方式的文字
   String getImportMethodText(WalletImportMethod method) {
     String text = '';
     switch (method) {
@@ -41,14 +43,23 @@ class AddWalletDialog extends StatelessWidget {
     return text;
   }
 
-  void _onSelectType({required WidgetRef ref}) {}
+  /// 選擇匯入錢包的方式
+  void _onSelectImportMethod({required WidgetRef ref}) {}
 
+  /// 貼上複製到剪貼簿的文字
   Future<void> _onPastePrivateKey() async {
     ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     String copiedtext = clipboardData?.text ?? '';
     privateKeyEditController.text = copiedtext;
     privateKeyEditController.selection =
         TextSelection.fromPosition(TextPosition(offset: privateKeyEditController.text.length));
+  }
+
+  /// 確認送出
+  void _onConfirm(BuildContext context) {
+    if (privateKeyEditController.text.isNotEmpty) {
+      Navigator.maybePop(context, privateKeyEditController.text);
+    }
   }
 
   @override
@@ -90,7 +101,7 @@ class AddWalletDialog extends StatelessWidget {
                     final String text = getImportMethodText(method);
 
                     return CommonButton(
-                      onPress: () => _onSelectType(ref: ref),
+                      onPress: () => _onSelectImportMethod(ref: ref),
                       padding: const EdgeInsets.all(16.0),
                       color: CustomTheme.primaryColor,
                       child: Text(
@@ -104,7 +115,6 @@ class AddWalletDialog extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 36.0),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -125,11 +135,7 @@ class AddWalletDialog extends StatelessWidget {
             CommonTextField(textEditingController: privateKeyEditController),
             const SizedBox(height: 24.0),
             CommonButton(
-              onPress: () {
-                if (privateKeyEditController.text.isNotEmpty) {
-                  Navigator.maybePop(context, privateKeyEditController.text);
-                }
-              },
+              onPress: () => _onConfirm(context),
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               color: CustomTheme.secondColor,
               child: const Text(
