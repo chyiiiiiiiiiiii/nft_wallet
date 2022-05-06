@@ -16,6 +16,10 @@
 - [x] 轉移貨幣
 - [x] 轉移NFT
 
+## Issue
+- 交易完成後，Metamask會發出錯誤通知，實際上操作有成功，等待官方修正<br>
+https://github.com/MetaMask/metamask-mobile/issues/3927
+
 ## Packages
 - [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
 - [walletconnect_dart](walletconnect_dart)
