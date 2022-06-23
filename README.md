@@ -17,8 +17,8 @@
 - [x] 轉移NFT
 
 ## Issue
-- 交易完成後，Metamask會發出錯誤通知，實際上操作有成功，等待官方修正<br>
-https://github.com/MetaMask/metamask-mobile/issues/3927
+- 交易完成後，Metamask會發出錯誤通知(Oops Something Went Wrong)，實際上操作有成功，等待官方修正<br>
+[#3927](https://github.com/MetaMask/metamask-mobile/issues/3927)、[#4446](https://github.com/MetaMask/metamask-mobile/issues/4446)
 
 ## Packages
 - [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
@@ -31,8 +31,9 @@ https://github.com/MetaMask/metamask-mobile/issues/3927
 - [Riverpod 輕鬆學(二)，一些進階用法！](https://ab20803.medium.com/riverpod-%E8%BC%95%E9%AC%86%E5%AD%B8-%E4%BA%8C-%E4%B8%80%E4%BA%9B%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95-80acf4f27ef4)
 
 ## About
-Github：https://github.com/chyiiiiiiiiiiii<br>
+Github：[chyiiiiiiiiiiii](https://github.com/chyiiiiiiiiiiii)<br>
+Linkedin：[yiichenhi](https://www.linkedin.com/in/yiichenhi)</br>
 Youtube：[Yii](https://www.youtube.com/user/a22601807/videos)<br>
-Youtube：[一起饅頭(美食頻道)](https://www.youtube.com/channel/UC8-CcCmlIhIGcs9pdxx_BSw/videos])<br>
+Youtube：[一起饅頭](https://www.youtube.com/channel/UC8-CcCmlIhIGcs9pdxx_BSw/videos])<br>
 Instagram：[yiichenhi](https://www.instagram.com/yiichenhi/)<br>
 Email：ab20803@gmail.com<br>
