@@ -3,7 +3,8 @@
 <img src="media/demo.gif" width="300" height="648" />
 
 ## Introduction
-此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去
+此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去。
+此專案為Side project，主要實作一個區塊鏈錢包APP，進行一些合約操作，可以取得貨幣與NFT資訊，並將他們轉移出去>
 
 ## Function Implement
 - [x] 連結錢包，Metamask、匯入私鑰
@@ -17,12 +18,12 @@
 - [x] 轉移NFT
 
 ## Issue
-- 交易完成後，Metamask會發出錯誤通知(Oops Something Went Wrong)，實際上操作有成功，等待官方修正<br>
-[#3927](https://github.com/MetaMask/metamask-mobile/issues/3927)、[#4446](https://github.com/MetaMask/metamask-mobile/issues/4446)
+- [x] 交易完成後，Metamask會發出錯誤通知(Oops Something Went Wrong)，實際上操作有成功
+- 在Metamask v5.3.0已修正，詳細資訊可查看 [#3927](https://github.com/MetaMask/metamask-mobile/issues/3927)、[#4446](https://github.com/MetaMask/metamask-mobile/issues/4446)、[#4060](https://github.com/MetaMask/metamask-mobile/issues/4060) 
 
 ## Packages
 - [flutter_riverpod](https://pub.dev/packages/flutter_riverpod)
-- [walletconnect_dart](walletconnect_dart)
+- [walletconnect_dart](https://pub.dev/packages/wallet_connect)
 - [web3dart](https://pub.dev/packages/web3dart)
 - [url_launcher](https://pub.dev/packages/url_launcher)
 
