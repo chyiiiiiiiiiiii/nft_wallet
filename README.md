@@ -30,10 +30,19 @@
 - [Riverpod 輕鬆學，原來這麼好用！](https://ab20803.medium.com/riverpod-%E8%BC%95%E9%AC%86%E5%AD%B8-%E5%8E%9F%E4%BE%86%E9%80%99%E9%BA%BC%E5%A5%BD%E7%94%A8-7e7b231570bc)
 - [Riverpod 輕鬆學(二)，一些進階用法！](https://ab20803.medium.com/riverpod-%E8%BC%95%E9%AC%86%E5%AD%B8-%E4%BA%8C-%E4%B8%80%E4%BA%9B%E9%80%B2%E9%9A%8E%E7%94%A8%E6%B3%95-80acf4f27ef4)
 
-## About
-Github：[chyiiiiiiiiiiii](https://github.com/chyiiiiiiiiiiii)<br>
-Linkedin：[yiichenhi](https://www.linkedin.com/in/yiichenhi)</br>
-Youtube：[Yii](https://www.youtube.com/user/a22601807/videos)<br>
-Youtube：[一起饅頭](https://www.youtube.com/channel/UC8-CcCmlIhIGcs9pdxx_BSw/videos])<br>
-Instagram：[yiichenhi](https://www.instagram.com/yiichenhi/)<br>
-Email：ab20803@gmail.com<br>
+## Contribute
+- You can star and share with other developers if you feel good and learn something from this repository.
+- If you have some ideas, please discuss them with me or commit PR.
+
+## More of me
+[![Medium](https://img.shields.io/badge/medium-fff?style=for-the-badge&logo=medium&logoColor=black)](https://yiichenhi.medium.com)
+[![Linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yiichenhi/)
+[![Twitter](https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white)](https://twitter.com/yiichenhi)
+[![instagram](https://img.shields.io/badge/instagram-C6317F?style=for-the-badge&logo=instagram&logoColor=white)](http://instagram.com/flutterluvr.yii/)
+
+## Donate and encourage me
+[![BuyMeACoffee][buy_me_a_coffee_badge]][buy_me_a_coffee]
+
+<!-- Links -->
+[buy_me_a_coffee]: https://www.buymeacoffee.com/yiichenhi
+[buy_me_a_coffee_badge]: https://img.buymeacoffee.com/button-api/?text=Sponsor&emoji=&slug=yiichenhi&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff&size=64
